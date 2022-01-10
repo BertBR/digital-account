@@ -1,0 +1,26 @@
+[
+  {
+    "type": "initialize_account",
+    "payload": {
+      "name": "Joana Bárbara Caldeira",
+      "document": "999.999.999-99",
+      "available-limit": 1000
+    }
+  },
+  {
+    "type": "initialize_account",
+    "payload": {
+      "name": "Andreia Cecília Rocha",
+      "document": "111.111.111-11",
+      "available-limit": 500
+    }
+  },
+  {
+    "type": "initialize_account",
+    "payload": {
+      "name": "Teste repeat document",
+      "document": "111.111.111-11",
+      "available-limit": 90000
+    }
+  }
+]
