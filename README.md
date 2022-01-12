@@ -12,14 +12,14 @@
 
 - Deve inicializar uma conta atrelada a um número de documento (ex: CPF) ✅
 - Deve falhar se a conta ja foi inicializada (já existe um número de documento associado a outra conta) ✅
-- Deve falhar se o payload estiver incorreto durante a inicialização da conta
+- Deve falhar se o payload estiver incorreto durante a inicialização da conta ✅
 
 ### Efetuar transação
 
-- Deve efetuar uma transação atômica de saldo entre duas contas existentes
-- Deve falhar caso uma das contas não exista (não foi inicializada)
-- Deve falhar caso o limite disponível para o emissor seja menor que o valor da transferência
-- Deve falhar caso uma transação de igual valor, emissor e receptor tenha ocorrido nos X minutos anteriores a transação atual (parametrizar via ENV)
+- Deve efetuar uma transação atômica de saldo entre duas contas existentes 
+- Deve falhar caso uma das contas não exista (não foi inicializada) ✅
+- Deve falhar caso o limite disponível para o emissor seja menor que o valor da transferência ✅
+- Deve falhar caso uma transação de igual valor, emissor e receptor tenha ocorrido nos X minutos anteriores a transação atual (parametrizar via ENV) ✅
 
 ### Visualizar histórico de transações
 
