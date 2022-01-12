@@ -11,9 +11,9 @@ import { AccountTransactionService } from './AccountTransactionService';
 describe('AccountTransactionService', () => {
   let sut: AccountTransactionService;
 
-  const mockedDatetime = new Date().toISOString();
+  const getMockedDatetime = () => new Date().toISOString();
 
-  const mockedInitializedAccounts: Initialize[] = [
+  const getMockedInitializedAccounts = (): Initialize[] => [
     {
       name: 'sender',
       available_limit: 100,
@@ -34,7 +34,7 @@ describe('AccountTransactionService', () => {
           sender_document: 'any_sender',
           receiver_document: 'any_receiver',
           value: 10,
-          datetime: mockedDatetime,
+          datetime: getMockedDatetime(),
         },
       },
     ] as Operation<Transaction>[];
@@ -76,7 +76,7 @@ describe('AccountTransactionService', () => {
         AccountInitializationService.prototype as any,
         'getInitializedAccounts',
       )
-      .mockImplementation(() => mockedInitializedAccounts);
+      .mockImplementationOnce(() => getMockedInitializedAccounts());
     const expected = [
       {
         item: 0,
@@ -98,14 +98,14 @@ describe('AccountTransactionService', () => {
         AccountInitializationService.prototype as any,
         'getInitializedAccounts',
       )
-      .mockImplementation(() => mockedInitializedAccounts);
+      .mockImplementationOnce(() => getMockedInitializedAccounts());
 
     jest
       .spyOn(
         AccountTransactionService.prototype as any,
         'checkDuplicatedTransaction',
       )
-      .mockImplementation(() => true);
+      .mockImplementationOnce(() => true);
 
     const mockedOperation = getMockedOperation();
 
@@ -120,5 +120,80 @@ describe('AccountTransactionService', () => {
 
     const spy = await sut.perform(mockedOperation);
     expect(spy).toEqual(expected);
+  });
+
+  it('should process an atomic transaction', async () => {
+    jest
+      .spyOn(
+        AccountInitializationService.prototype as any,
+        'getInitializedAccounts',
+      )
+      .mockImplementationOnce(() => getMockedInitializedAccounts());
+
+    const mockedOperation = getMockedOperation();
+    const mockedAccounts = getMockedInitializedAccounts();
+
+    const mockedSender = mockedAccounts.find(
+      (acc) => acc.document === mockedOperation[0].payload.sender_document,
+    );
+
+    const expected = [
+      {
+        item: 0,
+        type: 'transaction',
+        status: 'success',
+        result: {
+          available_limit:
+            mockedSender.available_limit - mockedOperation[0].payload.value,
+          receiver_document: mockedOperation[0].payload.receiver_document,
+          sender_document: mockedOperation[0].payload.sender_document,
+          datetime: mockedOperation[0].payload.datetime,
+        },
+      },
+    ];
+
+    const updateAccountSpy = jest.spyOn(
+      AccountTransactionService.prototype as any,
+      'updateAccount',
+    );
+
+    const saveTransactionSpy = jest.spyOn(
+      AccountTransactionService.prototype as any,
+      'saveTransaction',
+    );
+
+    const res = await sut.perform(mockedOperation);
+    expect(res).toEqual(expected);
+    expect(updateAccountSpy).toHaveBeenCalledTimes(2);
+    expect(saveTransactionSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should rollback transaction if error occurred while processing', async () => {
+    jest.clearAllMocks();
+    jest
+      .spyOn(
+        AccountInitializationService.prototype as any,
+        'getInitializedAccounts',
+      )
+      .mockImplementationOnce(() => getMockedInitializedAccounts());
+    jest
+      .spyOn(AccountTransactionService.prototype as any, 'saveTransaction')
+      .mockImplementationOnce(() => {
+        throw Error();
+      });
+
+    const mockedOperation = getMockedOperation();
+    const updateAccountSpy = jest.spyOn(
+      AccountTransactionService.prototype as any,
+      'updateAccount',
+    );
+
+    const rollbackTransactionSpy = jest.spyOn(
+      AccountTransactionService.prototype as any,
+      'rollbackTransaction',
+    );
+    await sut.perform(mockedOperation);
+    expect(rollbackTransactionSpy).toHaveBeenCalledTimes(1);
+    expect(updateAccountSpy).toHaveBeenCalledTimes(0);
   });
 });
