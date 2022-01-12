@@ -85,7 +85,6 @@ export class AccountTransactionService {
           this.saveTransaction(line.payload);
           data[idx] = output as Operation<Transaction>;
         } catch (_) {
-          console.log('chegou aqui');
           this.rollbackTransaction(output as Transaction);
           data[idx] = this.tempDataIdx;
           continue;
@@ -121,7 +120,6 @@ export class AccountTransactionService {
         trx.receiver_document === transaction.receiver_document &&
         trx.value === transaction.value,
     );
-
     if (trx) {
       const minutesDiff = differenceInSeconds(
         new Date(transaction.datetime),

@@ -30,6 +30,7 @@ export class FileValidationHelper {
           };
           const idx = data.indexOf(line);
           data[idx] = output as Operation<unknown>;
+          continue;
         }
 
         if (line.type === OperationType.initialize_account) {
@@ -42,6 +43,7 @@ export class FileValidationHelper {
             };
             const idx = data.indexOf(line);
             data[idx] = output as Operation<unknown>;
+            continue;
           }
         }
       }
