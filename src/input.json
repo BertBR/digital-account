@@ -30,7 +30,16 @@
       "sender_document": "111.111.111-11",
       "receiver_document": "999.999.999-99",
       "value": 1000,
-      "datetime": "2022-01-09T22:42:12.191Z"
+      "datetime": "2022-01-09T22:43:12.191Z"
+    }
+  },
+  {
+    "type": "transaction",
+    "payload": {
+      "sender_document": "111.111.111-11",
+      "receiver_document": "999.999.999-99",
+      "value": 1000,
+      "datetime": "2022-01-09T22:42:10.191Z"
     }
   },
   {
