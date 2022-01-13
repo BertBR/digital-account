@@ -3,7 +3,7 @@ import {
   Operation,
   OperationType,
 } from '../models/operation.model';
-import { IAccountInitializationService } from './interfaces/IAccountInitializationService';
+import { IAccountInitializationService } from '../interfaces/IAccountInitializationService';
 
 export class AccountInitializationService
   implements IAccountInitializationService

@@ -1,4 +1,4 @@
-import { Initialize, Operation } from '../../models/operation.model';
+import { Initialize, Operation } from '../models/operation.model';
 
 export interface IAccountInitializationService {
   perform(file: Operation<Initialize>[]): Promise<Operation<Initialize>[]>;

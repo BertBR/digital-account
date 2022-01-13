@@ -1,4 +1,4 @@
-import { Operation, TransactionHistory } from '../../models/operation.model';
+import { Operation, TransactionHistory } from '../models/operation.model';
 
 export interface IGetAccountTransactionHistory {
   perform(

@@ -7,8 +7,8 @@ import {
   TransactionHistory,
 } from '../models/operation.model';
 import { BaseTransactionService } from './BaseTransactionService';
-import { IAccountInitializationService } from './interfaces/IAccountInitializationService';
-import { IGetAccountTransactionHistory } from './interfaces/IGetAccountTransactionHistory';
+import { IAccountInitializationService } from '../interfaces/IAccountInitializationService';
+import { IGetAccountTransactionHistory } from '../interfaces/IGetAccountTransactionHistory';
 
 export class GetAccountTransactionHistory
   implements IGetAccountTransactionHistory

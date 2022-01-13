@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { IAccountStorage } from './IAccountStorage';
+import { IAccountStorage } from '../interfaces/IAccountStorage';
 import { readFile, writeFile } from 'fs/promises';
 
 export class AccountStorage implements IAccountStorage {

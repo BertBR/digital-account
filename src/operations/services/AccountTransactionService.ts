@@ -5,10 +5,10 @@ import {
   OperationType,
   Transaction,
 } from '../models/operation.model';
-import { IAccountInitializationService } from './interfaces/IAccountInitializationService';
+import { IAccountInitializationService } from '../interfaces/IAccountInitializationService';
 import { differenceInSeconds } from 'date-fns';
 import { BaseTransactionService } from './BaseTransactionService';
-import { IAccountTransactionService } from './interfaces/IAccountTransactionService';
+import { IAccountTransactionService } from '../interfaces/IAccountTransactionService';
 
 export class AccountTransactionService implements IAccountTransactionService {
   private tempDataIdx: Operation<Transaction>;

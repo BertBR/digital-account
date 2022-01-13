@@ -6,10 +6,10 @@ import {
   TransactionHistory,
 } from '../models/operation.model';
 import { FileValidationHelper } from '../shared/FileValidationHelper';
-import { IAccountStorage } from '../storage/IAccountStorage';
-import { IAccountInitializationService } from './interfaces/IAccountInitializationService';
-import { IAccountTransactionService } from './interfaces/IAccountTransactionService';
-import { IGetAccountTransactionHistory } from './interfaces/IGetAccountTransactionHistory';
+import { IAccountStorage } from '../interfaces/IAccountStorage';
+import { IAccountInitializationService } from '../interfaces/IAccountInitializationService';
+import { IAccountTransactionService } from '../interfaces/IAccountTransactionService';
+import { IGetAccountTransactionHistory } from '../interfaces/IGetAccountTransactionHistory';
 
 export class DigitalAccountServices {
   constructor(
