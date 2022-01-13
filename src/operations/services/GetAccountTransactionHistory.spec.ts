@@ -103,4 +103,23 @@ describe('GetAccountTransactionHistory', () => {
     const res = await sut.perform(mockedOperation);
     expect(res).toEqual(expected);
   });
+
+  it('should fails if account has not been initialized', async () => {
+    jest
+      .spyOn(sut['accountInitializationService'], 'checkInitializedAccounts')
+      .mockImplementationOnce(() => null);
+
+    const expected = [
+      {
+        item: 0,
+        type: 'transaction_history',
+        status: 'failure',
+        violation: 'account_not_initialized',
+      },
+    ];
+
+    const mockedOperation = getMockedOperation();
+    const res = await sut.perform(mockedOperation);
+    expect(res).toEqual(expected);
+  });
 });
