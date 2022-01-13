@@ -24,5 +24,5 @@
 
 ### Visualizar histórico de transações
 
-- Deve retornar o histórico de transações completo da conta digital do solicitante
-- Deve falhar caso a conta não exista (não foi inicializada)
+- Deve retornar o histórico de transações completo da conta digital do solicitante ✅
+- Deve falhar caso a conta não exista (não foi inicializada) ✅
