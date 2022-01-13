@@ -7,40 +7,25 @@ import {
 } from '../models/operation.model';
 import { IAccountInitializationService } from './interfaces/IAccountInitializationService';
 import { differenceInSeconds } from 'date-fns';
+import { BaseTransactionService } from './BaseTransactionService';
+import { IAccountTransactionService } from './interfaces/IAccountTransactionService';
 
-export class AccountTransactionService {
-  private readonly transaction_history: Transaction[] = [];
+export class AccountTransactionService implements IAccountTransactionService {
   private tempDataIdx: Operation<Transaction>;
   private DUPLICATED_TRANSACTION_TOLERANCE_IN_SECONDS = 120;
+  private baseTransactionService = BaseTransactionService.getInstance();
 
   constructor(
     @Inject('Account_Initialization')
     private readonly accountInitializationService: IAccountInitializationService,
   ) {}
-  async perform(data: Operation<Transaction>[]) {
+
+  async perform(
+    data: Operation<Transaction>[],
+  ): Promise<Operation<Transaction>[]> {
     let output = {};
-    const initialized_accounts =
-      this.accountInitializationService.getInitializedAccounts();
     for (const line of data) {
       if (line.type === OperationType.transaction && line.payload) {
-        const sender = initialized_accounts.find(
-          (account) => account.document === line.payload.sender_document,
-        );
-        const receiver = initialized_accounts.find(
-          (account) => account.document === line.payload.receiver_document,
-        );
-
-        if (!sender || !receiver) {
-          output = {
-            item: data.indexOf(line),
-            type: 'transaction',
-            status: 'failure',
-            violation: 'account_not_initialized',
-          };
-          const idx = data.indexOf(line);
-          data[idx] = output as Operation<Transaction>;
-          continue;
-        }
         const isDuplicated = this.checkDuplicatedTransaction(line.payload);
         if (isDuplicated) {
           output = {
@@ -48,6 +33,23 @@ export class AccountTransactionService {
             type: 'transaction',
             status: 'failure',
             violation: 'double_transaction',
+          };
+          const idx = data.indexOf(line);
+          data[idx] = output as Operation<Transaction>;
+          continue;
+        }
+        const { receiver, sender } =
+          this.accountInitializationService.checkInitializedAccounts({
+            receiver_document: line.payload.receiver_document,
+            sender_document: line.payload.sender_document,
+          });
+
+        if (!sender || !receiver) {
+          output = {
+            item: data.indexOf(line),
+            type: 'transaction',
+            status: 'failure',
+            violation: 'account_not_initialized',
           };
           const idx = data.indexOf(line);
           data[idx] = output as Operation<Transaction>;
@@ -78,7 +80,7 @@ export class AccountTransactionService {
             datetime: line.payload.datetime,
           },
         };
-
+        line.payload.sender_available_limit = sender.available_limit;
         const idx = data.indexOf(line);
         try {
           this.tempDataIdx = data[idx];
@@ -95,17 +97,21 @@ export class AccountTransactionService {
         continue;
       }
     }
+
     return data;
   }
 
   private saveTransaction(transaction: Transaction) {
-    this.transaction_history.push(transaction);
+    this.baseTransactionService.addToTransactionHistory = transaction;
   }
 
   private rollbackTransaction(transaction: Transaction) {
-    const idx = this.transaction_history.indexOf(transaction);
+    const idx =
+      this.baseTransactionService.transaction_history.indexOf(transaction);
     if (idx !== -1) {
-      this.transaction_history.splice(idx, 1);
+      this.baseTransactionService.transaction_history.splice(idx, 1);
+      this.baseTransactionService.updateTransactionHistory =
+        this.baseTransactionService.transaction_history;
     }
   }
 
@@ -114,7 +120,7 @@ export class AccountTransactionService {
   }
 
   private checkDuplicatedTransaction(transaction: Transaction): boolean {
-    const trx = this.transaction_history.find(
+    const trx = this.baseTransactionService.transaction_history.find(
       (trx) =>
         trx.sender_document === transaction.sender_document &&
         trx.receiver_document === transaction.receiver_document &&
