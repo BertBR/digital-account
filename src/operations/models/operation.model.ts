@@ -20,9 +20,9 @@ export type Transaction = {
   receiver_document: string;
   value: number;
   datetime: string;
-  sender_available_limit: number;
+  sender_available_limit?: number;
 };
 
-export type History = {
+export type TransactionHistory = {
   document: string;
 };
