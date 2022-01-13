@@ -1,0 +1,13 @@
+version: '3.8'
+
+services: 
+  digital-account:
+    build:
+      context: ./
+    container_name: 'digital-account'
+    volumes:
+      - ./:/usr/app
+      - /usr/app/node_modules
+    ports:
+      - 3000:3000
+      - 9229:9229
