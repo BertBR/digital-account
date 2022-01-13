@@ -26,6 +26,11 @@ describe('AccountTransactionService', () => {
     },
   ];
 
+  const getMockedSender = () =>
+    getMockedInitializedAccounts().filter((acc) => acc.name === 'sender');
+  const getMockedReceiver = () =>
+    getMockedInitializedAccounts().filter((acc) => acc.name === 'receiver');
+
   const getMockedOperation = () =>
     [
       {
@@ -51,9 +56,21 @@ describe('AccountTransactionService', () => {
     }).compile();
 
     sut = module.get<AccountTransactionService>(AccountTransactionService);
+
+    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('should fails a transaction when one of accounts in transaction was not initialized', async () => {
+    jest
+      .spyOn(
+        AccountInitializationService.prototype as any,
+        'checkInitializedAccounts',
+      )
+      .mockImplementationOnce(() => ({
+        sender: null,
+        receiver: null,
+      }));
     const mockedOperation = getMockedOperation();
     const expected = [
       {
@@ -74,9 +91,12 @@ describe('AccountTransactionService', () => {
     jest
       .spyOn(
         AccountInitializationService.prototype as any,
-        'getInitializedAccounts',
+        'checkInitializedAccounts',
       )
-      .mockImplementationOnce(() => getMockedInitializedAccounts());
+      .mockImplementationOnce(() => ({
+        sender: getMockedSender()[0],
+        receiver: getMockedReceiver()[0],
+      }));
     const expected = [
       {
         item: 0,
@@ -96,9 +116,12 @@ describe('AccountTransactionService', () => {
     jest
       .spyOn(
         AccountInitializationService.prototype as any,
-        'getInitializedAccounts',
+        'checkInitializedAccounts',
       )
-      .mockImplementationOnce(() => getMockedInitializedAccounts());
+      .mockImplementationOnce(() => ({
+        sender: getMockedSender()[0],
+        receiver: getMockedReceiver()[0],
+      }));
 
     jest
       .spyOn(
@@ -126,9 +149,12 @@ describe('AccountTransactionService', () => {
     jest
       .spyOn(
         AccountInitializationService.prototype as any,
-        'getInitializedAccounts',
+        'checkInitializedAccounts',
       )
-      .mockImplementationOnce(() => getMockedInitializedAccounts());
+      .mockImplementationOnce(() => ({
+        sender: getMockedSender()[0],
+        receiver: getMockedReceiver()[0],
+      }));
 
     const mockedOperation = getMockedOperation();
     const mockedAccounts = getMockedInitializedAccounts();
@@ -169,13 +195,15 @@ describe('AccountTransactionService', () => {
   });
 
   it('should rollback transaction if error occurred while processing', async () => {
-    jest.clearAllMocks();
     jest
       .spyOn(
         AccountInitializationService.prototype as any,
-        'getInitializedAccounts',
+        'checkInitializedAccounts',
       )
-      .mockImplementationOnce(() => getMockedInitializedAccounts());
+      .mockImplementationOnce(() => ({
+        sender: getMockedSender()[0],
+        receiver: getMockedReceiver()[0],
+      }));
     jest
       .spyOn(AccountTransactionService.prototype as any, 'saveTransaction')
       .mockImplementationOnce(() => {
