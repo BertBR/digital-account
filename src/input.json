@@ -4,7 +4,7 @@
     "payload": {
       "name": "Joana Bárbara Caldeira",
       "document": "999.999.999-99",
-      "available_limit": 500
+      "available_limit": 1000
     }
   },
   {
@@ -12,7 +12,25 @@
     "payload": {
       "name": "Andreia Cecília Rocha",
       "document": "111.111.111-11",
-      "available_limit": 100000
+      "available_limit": 500
+    }
+  },
+  {
+    "type": "transaction",
+    "payload": {
+      "sender_document": "999.999.999-99",
+      "receiver_document": "111.111.111-11",
+      "value": 300,
+      "datetime": "2021-08-12T14:30:30Z"
+    }
+  },
+  {
+    "type": "transaction",
+    "payload": {
+      "sender_document": "999.999.999-99",
+      "receiver_document": "111.111.111-11",
+      "value": 150,
+      "datetime": "2021-08-12T14:32:08Z"
     }
   },
   {
@@ -20,52 +38,20 @@
     "payload": {
       "sender_document": "111.111.111-11",
       "receiver_document": "999.999.999-99",
-      "value": 1000,
-      "datetime": "2022-01-09T22:44:12.191Z"
+      "value": 20,
+      "datetime": "2021-08-12T14:33:00Z"
     }
   },
   {
-    "type": "transaction",
+    "type": "transaction_history",
     "payload": {
-      "sender_document": "111.111.111-11",
-      "receiver_document": "999.999.999-99",
-      "value": 1000,
-      "datetime": "2022-01-09T22:43:12.191Z"
+      "document": "111.111.111-11"
     }
   },
   {
-    "type": "transaction",
+    "type": "transaction_history",
     "payload": {
-      "sender_document": "111.111.111-11",
-      "receiver_document": "999.999.999-99",
-      "value": 1000,
-      "datetime": "2022-01-09T22:42:10.191Z"
-    }
-  },
-  {
-    "type": "initialize_account",
-    "payload": {
-      "name": "Teste repeat document",
-      "document": "111.111.111-11",
-      "available_limit": 100000
-    }
-  },
-  {
-    "type": "transaction",
-    "payload": {
-      "sender_document": "111.111.111-11",
-      "receiver_document": "000.000.000-00",
-      "value": 500,
-      "datetime": "2022-01-11T22:44:12.191Z"
-    }
-  }, 
-  {
-    "type": "transaction",
-    "payload": {
-      "sender_document": "111.111.111-112",
-      "receiver_document": "999.999.999-99",
-      "value": 100,
-      "datetime": "2022-01-10T22:44:12.191Z"
+      "document": "999.999.999-99"
     }
   }
 ]
