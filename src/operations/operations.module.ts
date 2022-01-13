@@ -3,6 +3,7 @@ import { OperationsController } from './controllers/OperationsController';
 import { AccountInitializationService } from './services/AccountInitializationService';
 import { AccountTransactionService } from './services/AccountTransactionService';
 import { DigitalAccountServices } from './services/DigitalAccountServices';
+import { GetAccountTransactionHistory } from './services/GetAccountTransactionHistory';
 import { FileValidationHelper } from './shared/FileValidationHelper';
 import { AccountStorage } from './storage/AccountStorage';
 
@@ -20,6 +21,10 @@ import { AccountStorage } from './storage/AccountStorage';
     {
       provide: 'Account_Transaction',
       useClass: AccountTransactionService,
+    },
+    {
+      provide: 'Account_Transaction_History',
+      useClass: GetAccountTransactionHistory,
     },
     FileValidationHelper,
     DigitalAccountServices,

@@ -1,9 +1,15 @@
 import { Inject } from '@nestjs/common';
-import { Initialize, Operation, Transaction } from '../models/operation.model';
+import {
+  Initialize,
+  Operation,
+  Transaction,
+  TransactionHistory,
+} from '../models/operation.model';
 import { FileValidationHelper } from '../shared/FileValidationHelper';
 import { IAccountStorage } from '../storage/IAccountStorage';
 import { IAccountInitializationService } from './interfaces/IAccountInitializationService';
 import { IAccountTransactionService } from './interfaces/IAccountTransactionService';
+import { IGetAccountTransactionHistory } from './interfaces/IGetAccountTransactionHistory';
 
 export class DigitalAccountServices {
   constructor(
@@ -11,6 +17,8 @@ export class DigitalAccountServices {
     private readonly accountInitializationService: IAccountInitializationService,
     @Inject('Account_Transaction')
     private readonly accountTransactionService: IAccountTransactionService,
+    @Inject('Account_Transaction_History')
+    private readonly getAccountTransactionHistory: IGetAccountTransactionHistory,
     @Inject('Account_Storage')
     private readonly accountStorage: IAccountStorage,
     private readonly fileValidationHelper: FileValidationHelper,
@@ -22,8 +30,13 @@ export class DigitalAccountServices {
     data = await this.accountInitializationService.perform(
       data as unknown as Operation<Initialize>[],
     );
-    await this.accountTransactionService.perform(
+
+    data = await this.accountTransactionService.perform(
       data as unknown as Operation<Transaction>[],
+    );
+
+    data = await this.getAccountTransactionHistory.perform(
+      data as unknown as Operation<TransactionHistory>[],
     );
 
     await this.accountStorage.write(data);
