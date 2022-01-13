@@ -10,7 +10,9 @@ export class AccountInitializationService
 {
   private readonly initialized_accounts: Initialize[] = [];
 
-  async perform(data: Operation<Initialize>[]): Promise<unknown[]> {
+  async perform(
+    data: Operation<Initialize>[],
+  ): Promise<Operation<Initialize>[]> {
     let output = {};
     for (const line of data) {
       if (line.type === OperationType.initialize_account && line.payload) {
@@ -48,8 +50,36 @@ export class AccountInitializationService
     return this.initialized_accounts.find((el) => el.document === document);
   }
 
-  public getInitializedAccounts(): Initialize[] {
-    return this.initialized_accounts;
+  public checkInitializedAccounts({
+    sender_document,
+    receiver_document,
+  }: {
+    sender_document?: string;
+    receiver_document?: string;
+  }): {
+    sender: Initialize;
+    receiver: Initialize;
+  } {
+    let sender: Initialize;
+    let receiver: Initialize;
+
+    if (sender_document) {
+      sender = this.initialized_accounts.find(
+        (account) => account.document === sender_document,
+      );
+    }
+
+    if (receiver_document) {
+      receiver = this.initialized_accounts.find(
+        (account) => account.document === receiver_document,
+      );
+    }
+
+    if (!sender && !receiver) {
+      return null;
+    }
+
+    return { sender, receiver };
   }
 
   public updateAvailableLimits(account: Initialize): void {
