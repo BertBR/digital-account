@@ -1,7 +1,6 @@
-<center><img src="https://www.paymentsjournal.com/wp-content/uploads/2019/09/banking-4397449_1920.jpg" width=500 alt="Digital account"/>
+<p align="center"><img src="https://www.paymentsjournal.com/wp-content/uploads/2019/09/banking-4397449_1920.jpg" width=800 alt="Digital account"/></p>
 
-# Digital Account :bank:
-</center>
+<h2><p align="center"> Digital Account 🏦</p></h2> 
 
 ### :gear: How it works 
 
