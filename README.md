@@ -46,6 +46,7 @@ I've choose some libs and frameworks according
 ### :floppy_disk: How to run
 
 **Container**
+
 You will need [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/)
 
 After get both...
@@ -54,7 +55,9 @@ git clone https://github.com/BertBR/digital-account.git
 cd digital-account
 make run
 ```
+
 **Local**
+
 You will need only [Node.js](https://nodejs.org/en/download/) installed in your local machine.
 After get it...
 ```bash
@@ -62,7 +65,9 @@ git clone https://github.com/BertBR/digital-account.git
 cd digital-account
 npm i && npm start:dev
 ```
+
 **Testing via api**
+
 Now make a request...
 ```bash
 curl -X POST http://127.0.0.1:3000/operations/run
